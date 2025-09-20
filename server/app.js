@@ -26,6 +26,18 @@ app.get('/api/quote', async (req, res) => {
   }
 });
 
+app.delete('/api/getQuote/:index', (req,res) => {
+  const {index} = req.params;
+
+  if(index < 0 || index >= customQuotes.length){
+    res.status(400).json({error: 'Invalid index'});
+  }
+
+  const deletedQuote = customQuotes.splice(index,1);
+
+  res.json({message: 'Quote deleted successfully', deletedQuote});
+})
+
 app.get('/api/getQuote', (req, res) => {
   res.json(customQuotes);
 });

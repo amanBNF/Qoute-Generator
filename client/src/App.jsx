@@ -30,6 +30,17 @@ const App = () => {
       .catch(() => setLoading(false));
   }
 
+  const handleDelete = (index) => {
+    fetch(`http://localhost:5000/api/getQuote/${index}`, {
+      method: 'DELETE',
+  })
+  .then((res) => res.json())
+  .then(() => {
+    fetchCustomQuotes();
+  })
+  .catch((err) => console.error('Error deleting quote:', err));
+}
+
   const fetchCustomQuotes = () => {
     fetch('http://localhost:5000/api/getQuote')
       .then(res => res.json())
@@ -107,6 +118,7 @@ const App = () => {
               <li key={index} className="mt-4 border-b border-gray-700 pb-4">
                 <p className="text-xl italic">"{q.q}"</p>
                 <p className="text-md text-gray-300 text-right">— {q.a}</p>
+                <button onClick={() => handleDelete(index)} className='text-right text-sm border-2 text-white border-red-500 rounded-2xl py-2 px-3 cursor-pointer hover:bg-red-600 hover:text-black'>Delete</button>
               </li>
             ))}
           </ul>
