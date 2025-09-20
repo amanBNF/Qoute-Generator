@@ -10,6 +10,8 @@ app.use(cors()); //use for cross origin requests
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+let customQuotes = [];
+
 //routes
 app.get('/api/quote', async (req, res) => {
   try {
@@ -23,6 +25,23 @@ app.get('/api/quote', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch quote' });
   }
 });
+
+app.get('/api/getQuote', (req, res) => {
+  res.json(customQuotes);
+});
+
+app.post('/api/getQuote', (req, res) => {
+  const {q, a} = req.body;
+
+  if(!q || !a) {
+    res.status(400).json({error: 'Quote and Author are required'});
+  }
+
+  const newQuote = {q,a};
+  customQuotes.push(newQuote);
+
+  res.status(201).json(newQuote);
+})
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
